@@ -1,5 +1,5 @@
 from requests import get,post
-import re,json
+import re,json,html
 
 def get_prov():
 	r = get("https://m.nomor.net/_kodepos.php?_i=provinsi-kodepos").text
@@ -11,10 +11,12 @@ def get_kab(prov):
 	return kabs
 def get_kec(kab):
 	r = get(kab).text
+	r = html.unescape(r)
 	kecs = re.findall(r"td\ align\=\"center\"\>\d+\<.*?\<a\ href\=\"(.*?)\".*?\>([a-zA-Z\ \'\"\/\(\)\-]+)\<\/a.*?\<td\ align\=\"center\".*?\<a\ href\=.*?\>(\d+)\<\/a",r)
 	return kecs
 def get_kel(kec):
 	r = get(kec).text
+	r = html.unescape(r)
 	kels = re.findall(r"td\ align\=\"center\"\>\d+\<\/td\>.*?\<a\ href\=.*?\"\>(\d+)\<\/a.*?td\>\<a.*?\>([a-zA-Z\ \'\"\/\(\)\-]+)\<\/a",r)
 	return kels
 def main():
